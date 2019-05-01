@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import CardList from "./CardList";
-import SearchBox from "./SearchBox";
+import CardList from "../components/CardList";
+import SearchBox from "../SearchBox";
+import Scroll from "../components/Scroll";
 import "./App.css";
 
 class App extends Component {
@@ -11,7 +12,7 @@ class App extends Component {
   };
   componentDidMount() {
     fetch("https://jsonplaceholder.typicode.com/users")
-      .then(res => res.json()) //convert to json json()
+      .then(res => res.json()) //convert to json, json()
       .then(users => this.setState({ robots: users }));
   }
 
@@ -19,19 +20,22 @@ class App extends Component {
     this.setState({ searchField: event.target.value });
   };
   handleCardSetChange = event => {
-    if (this.state.cardSet === 1) {
-      this.setState({ cardSet: 2 });
-    } else if (this.state.cardSet === 2) {
-      this.setState({ cardSet: 3 });
-    } else if (this.state.cardSet === 3) {
-      this.setState({ cardSet: 4 });
+    const rn = Math.floor(Math.random() * 2) + 1; //return 1 or 2
+    if (this.state.cardSet <= 2) {
+      this.setState(prevState => {
+        return { cardSet: prevState.cardSet + rn };
+      });
     } else {
-      this.setState({ cardSet: 1 });
+      this.setState(prevState => {
+        return { cardSet: prevState.cardSet - rn };
+      });
     }
   };
+
   render() {
     const { robots, searchField, cardSet } = this.state;
-    if (robots.length === 0) {
+    if (!robots.length) {
+      //if length === 0 ,in js mean false,!false ===true
       return <h1 className="tc">Loading</h1>;
     }
     return (
@@ -50,7 +54,13 @@ class App extends Component {
             switch
           </button>
         </div>
-        <CardList robots={robots} searchField={searchField} cardSet={cardSet} />
+        <Scroll>
+          <CardList
+            robots={robots}
+            searchField={searchField}
+            cardSet={cardSet}
+          />
+        </Scroll>
       </div>
     );
   }
