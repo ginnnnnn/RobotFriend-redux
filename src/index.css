@@ -9,8 +9,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: url(/trianglify.png), no-repeat;
-  background-size: 100%;
+  background-image: url(/trianglify.png);
+  background-repeat: no-repeat;
+  background-size: cover;
   min-height: 100%;
-  background-position: buttom;
+  background-position: bottom;
 }
