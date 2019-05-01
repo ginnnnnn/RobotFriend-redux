@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import CardList from "../components/CardList";
 import SearchBox from "../SearchBox";
 import Scroll from "../components/Scroll";
+import ErrorBoundry from "../components/ErrorBoundry";
 import "./App.css";
 
 class App extends Component {
@@ -55,11 +56,13 @@ class App extends Component {
           </button>
         </div>
         <Scroll>
-          <CardList
-            robots={robots}
-            searchField={searchField}
-            cardSet={cardSet}
-          />
+          <ErrorBoundry>
+            <CardList
+              robots={robots}
+              searchField={searchField}
+              cardSet={cardSet}
+            />
+          </ErrorBoundry>
         </Scroll>
       </div>
     );
