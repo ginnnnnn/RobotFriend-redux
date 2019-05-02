@@ -9,7 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url(/trianglify.png);
+  background-image: url(./img/trianglify.png);
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100%;
