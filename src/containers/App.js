@@ -1,43 +1,55 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import CardList from "../components/CardList";
-import SearchBox from "../SearchBox";
+import SearchBox from "../components/SearchBox";
 import Scroll from "../components/Scroll";
 import ErrorBoundry from "../components/ErrorBoundry";
 import "./App.css";
 
-class App extends Component {
-  state = {
-    robots: [],
-    searchField: "",
-    cardSet: 1
+import { setSearchfield, requestRobots, switchCardset } from "../actions";
+
+const mapStateToProps = state => {
+  return {
+    searchField: state.searchRobots.searchField,
+    cardSet: state.searchRobots.cardSet,
+    robots: state.requestRobots.robots,
+    isPending: state.requestRobots.isPending,
+    error: state.requestRobots.error
   };
+};
+//state -> store, got store to check searchRobots and take searchField
+//,then set it as searchField to props
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleSearchChange: event => dispatch(setSearchfield(event.target.value)),
+    handleCardSetChange: event => dispatch(switchCardset()),
+    handleRobotsRequest: () => dispatch(requestRobots())
+  };
+};
+
+class App extends Component {
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then(res => res.json()) //convert to json, json()
-      .then(users => this.setState({ robots: users }));
+    this.props.handleRobotsRequest();
   }
 
-  handleSearchChange = event => {
-    this.setState({ searchField: event.target.value });
-  };
-  handleCardSetChange = event => {
-    const rn = Math.floor(Math.random() * 2) + 1; //return 1 or 2
-    if (this.state.cardSet <= 2) {
-      this.setState(prevState => {
-        return { cardSet: prevState.cardSet + rn };
-      });
-    } else {
-      this.setState(prevState => {
-        return { cardSet: prevState.cardSet - rn };
-      });
-    }
-  };
-
   render() {
-    const { robots, searchField, cardSet } = this.state;
-    if (!robots.length) {
+    const {
+      searchField,
+      cardSet,
+      handleSearchChange,
+      robots,
+      isPending,
+      error
+    } = this.props;
+
+    if (isPending) {
       //if length === 0 ,in js mean false,!false ===true
       return <h1 className="tc">Loading</h1>;
+    }
+    if (error) {
+      console.log("error", error);
+      return <h1 className="tc">{error}</h1>;
     }
     return (
       <div className="tc">
@@ -45,12 +57,12 @@ class App extends Component {
 
         <div className="flex justify-center">
           <SearchBox
-            searchChange={this.handleSearchChange}
+            searchChange={handleSearchChange}
             searchField={searchField}
           />
           <button
             className="ba br3 pa2 ma2 grow bg-gold w4"
-            onClick={this.handleCardSetChange}
+            onClick={this.props.handleCardSetChange}
           >
             switch
           </button>
@@ -69,4 +81,10 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
+
+//connect is a higher order function for subscrition of store to App
+//connect() runs and return another function that takes app as argument
