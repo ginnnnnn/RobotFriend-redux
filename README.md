@@ -1,8 +1,12 @@
-This is a simple cards display for react pratice .
+This is a simply project demonstrating how Flux pattern works and how rudux works
 
 ## Dependencies
 
 create-react-app cli
+redux
+react-redux
+redux-thunk
+redux-logger
 tachyons
 
 ### `api`
@@ -12,13 +16,11 @@ https://robohash.org
 
 ### `App introdution`
 
-use react and fetch the exisiting data from jsonplaceholder api
+use RobotsFriend app and applied redux with it.
 
-render as component with robohash.org to get the image.
+add redux-logger as middleware to monitor store change
 
-randomly change different card sets by switch button
-
-serach function for fillter out the matching key word and immediately show on screen
+add redux-thunk as middle to do async call with redux
 
 ### `App background`
 
